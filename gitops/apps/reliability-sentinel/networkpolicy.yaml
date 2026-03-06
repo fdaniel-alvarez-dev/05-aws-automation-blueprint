@@ -1,0 +1,12 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: reliability-sentinel-deny-all
+  namespace: reliability-sentinel
+spec:
+  podSelector:
+    matchLabels:
+      app: reliability-sentinel
+  policyTypes:
+    - Ingress
+    - Egress

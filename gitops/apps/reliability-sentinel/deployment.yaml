@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: reliability-sentinel
+  namespace: reliability-sentinel
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: reliability-sentinel
+  template:
+    metadata:
+      labels:
+        app: reliability-sentinel
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: sentinel
+          image: busybox:1.36
+          command: ["sh", "-c", "while true; do date -u; sleep 30; done"]
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              cpu: 50m
+              memory: 64Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
